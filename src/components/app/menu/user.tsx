@@ -12,6 +12,7 @@ import {
 	MenuItemGroup,
 	MenuSeparator
 } from '@/components/ui/menu'
+import { Link } from 'react-router'
 
 export const UserMenu: FC = memo((): JSX.Element => {
 	const { user, logout } = useAuth()
@@ -37,7 +38,9 @@ export const UserMenu: FC = memo((): JSX.Element => {
 				<MenuSeparator />
 
 				<MenuItemGroup>
-					<MenuItem value='profile'>Meu perfil</MenuItem>
+					<MenuItem value='profile' asChild>
+						<Link to='/profile'>Meu perfil</Link>
+					</MenuItem>
 					<MenuItem value='settings'>Configurações</MenuItem>
 				</MenuItemGroup>
 

@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router'
 
 import { App } from '@/app'
 import { Login } from '@/app/login'
+import { Profile } from '@/app/profile'
 import { FormNew } from '@/app/form/new'
 import { Register } from '@/app/register'
 import { Dashboard } from '@/app/dashboard'
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
 					{
 						path: '/form/new',
 						element: <FormNew />
+					},
+					{
+						path: '/profile',
+						element: <Profile />
 					}
 				]
 			}
