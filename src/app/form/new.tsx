@@ -1,5 +1,8 @@
 import { FC } from 'react'
 import { LuPlus } from 'react-icons/lu'
+import { useAuth } from '@/hooks/use-auth'
+import { useNavigate } from 'react-router'
+import { doc, setDoc } from 'firebase/firestore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import {
@@ -12,9 +15,11 @@ import {
 	Separator
 } from '@chakra-ui/react'
 
+import { db } from '@/service/firebase'
 import { Field } from '@/components/ui/field'
 import { formSchema } from '@/config/schemas'
 import { Button } from '@/components/ui/button'
+import { toaster } from '@/components/ui/toaster'
 import { InputGroup } from '@/components/ui/input-group'
 import { HeaderAuth } from '@/components/app/header/auth'
 import { Questions } from '@/components/app/forms/questions'
@@ -26,6 +31,8 @@ import {
 } from '@/components/ui/action-bar'
 
 export const FormNew: FC = (): JSX.Element => {
+	const { user } = useAuth()
+	const navigate = useNavigate()
 	const {
 		watch,
 		register,
@@ -49,6 +56,7 @@ export const FormNew: FC = (): JSX.Element => {
 		}
 	})
 
+	const watchTitle = watch('title')
 	const watchQuestions = watch('questions')
 
 	const addQuestion = (type: TypeOfQuestion) => {
@@ -81,10 +89,8 @@ export const FormNew: FC = (): JSX.Element => {
 	const onSubmitForm: SubmitHandler<Form> = async values => {
 		const { title, description, questions } = values
 
-		console.log({ title, description })
+		console.log({ title, description, questions })
 
-		// Se houver alguma questão do tipo 'multiple-choice', 'dropdown' ou 'checkbox' com menos de 2 opções
-		// o formulário não será enviado e um alerta será exibido
 		const hasInvalidOptions = questions.some(
 			question =>
 				['multiple-choice', 'dropdown', 'checkbox'].includes(question.type) &&
@@ -92,14 +98,63 @@ export const FormNew: FC = (): JSX.Element => {
 		)
 
 		if (hasInvalidOptions) {
-			alert('Questões do tipo múltipla escolha devem ter no mínimo 2 opções')
+			toaster.error({
+				title: 'Erro ao publicar formulário',
+				description:
+					'Perguntas do tipo "Múltipla escolha", "Caixa de seleção" ou "Dropdown" devem ter no mínimo 2 opções.',
+				action: {
+					label: 'Entendi',
+					onClick: () => {}
+				}
+			})
 			return
+		}
+
+		try {
+			await setDoc(doc(db, 'forms', crypto.randomUUID()), {
+				title,
+				description,
+				// transforma as perguntas em um objeto onde a chave é o id da pergunta
+				questions: questions.reduce<Record<string, Omit<TypeQuestions, 'id'>>>(
+					(acc, question) => {
+						acc[question.id] = { ...question, options: question.options ?? [] }
+						return acc
+					},
+					{}
+				),
+				visibility: 'public',
+				createdAt: new Date(),
+				createdBy: user.uid
+			})
+
+			toaster.success({
+				title: 'Formulário publicado',
+				description: 'Seu formulário foi publicado com sucesso.',
+				action: {
+					label: 'Ok',
+					onClick: () => {}
+				}
+			})
+
+			navigate('/dashboard')
+		} catch (error) {
+			console.error(error)
+
+			toaster.error({
+				title: 'Erro ao publicar formulário',
+				description:
+					'Ocorreu um erro ao tentar publicar o formulário. Tente novamente mais tarde.',
+				action: {
+					label: 'Entendi',
+					onClick: () => {}
+				}
+			})
 		}
 	}
 
 	return (
 		<VStack minH='100vh' w='full'>
-			<HeaderAuth />
+			<HeaderAuth title={watchTitle} />
 
 			<Flex px={4} pt={4} pb={8} flex={1} w='full'>
 				<VStack
@@ -187,6 +242,7 @@ export const FormNew: FC = (): JSX.Element => {
 							<Button
 								size='sm'
 								variant='ghost'
+								disabled={isSubmitting}
 								onClick={() => addQuestion('short-text')}
 							>
 								<LuPlus />

@@ -7,53 +7,61 @@ import { HStack, Input, Link as ChakraLink, Text } from '@chakra-ui/react'
 import { UserMenu } from '../menu/user'
 import { InputGroup } from '@/components/ui/input-group'
 
-export const HeaderAuth: FC = memo((): JSX.Element => {
-	return (
-		<HStack
-			px={8}
-			py={4}
-			w='full'
-			as='header'
-			borderBottom='1px solid'
-			borderColor='border'
-		>
-			<HStack w='full'>
-				<ChakraLink asChild>
-					<Link to='/dashboard'>
-						<SiGoogleforms size={32} />
-						<Text
-							as='span'
-							display={['none', 'block']}
-							fontSize='xl'
-							color='fg.muted'
-							fontWeight='bold'
-							transition='colors'
-							_hover={{
-								color: 'fg'
-							}}
-						>
-							Forms
-						</Text>
-					</Link>
-				</ChakraLink>
+interface HeaderAuthProps {
+	title?: string
+}
 
-				<HStack w='full' mx={[2, 4, 8]} maxW='breakpoint-sm'>
-					<InputGroup w='full' startElement={<FaMagnifyingGlass />}>
-						<Input
-							bg='bg.muted'
-							type='search'
-							border='none'
-							rounded='full'
-							placeholder='Pesquisar'
-						/>
-					</InputGroup>
-				</HStack>
+export const HeaderAuth: FC<HeaderAuthProps> = memo(
+	({ title }: HeaderAuthProps): JSX.Element => {
+		return (
+			<HStack
+				px={8}
+				py={4}
+				w='full'
+				as='header'
+				borderBottom='1px solid'
+				borderColor='border'
+			>
+				<HStack w='full'>
+					<ChakraLink asChild>
+						<Link to='/dashboard'>
+							<SiGoogleforms size={32} />
+							<Text
+								truncate
+								as='span'
+								maxW='14rem'
+								fontSize='xl'
+								color='fg.muted'
+								fontWeight='bold'
+								transition='colors'
+								display={['none', 'block']}
+								_hover={{
+									color: 'fg'
+								}}
+							>
+								{title || 'Forms'}
+							</Text>
+						</Link>
+					</ChakraLink>
 
-				<HStack ml='auto'>
-					<UserMenu />
+					<HStack w='full' mx={[2, 4, 8]} maxW='breakpoint-sm'>
+						<InputGroup w='full' startElement={<FaMagnifyingGlass />}>
+							<Input
+								bg='bg.muted'
+								type='search'
+								border='none'
+								rounded='full'
+								placeholder='Pesquisar'
+							/>
+						</InputGroup>
+					</HStack>
+
+					<HStack ml='auto'>
+						<UserMenu />
+					</HStack>
 				</HStack>
 			</HStack>
-		</HStack>
-	)
-})
+		)
+	}
+)
 HeaderAuth.displayName = 'HeaderAuth'
