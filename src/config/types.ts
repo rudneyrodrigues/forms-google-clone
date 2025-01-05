@@ -1,4 +1,8 @@
-export type TypeQuestion =
+import { z } from 'zod'
+
+import { formSchema } from './schemas'
+
+export type TypeOfQuestion =
 	| 'short-text'
 	| 'paragraph'
 	| 'multiple-choice'
@@ -6,12 +10,12 @@ export type TypeQuestion =
 	| 'dropdown'
 	| 'file-upload'
 
-export type Questions = {
+export type TypeQuestions = {
 	id: string
 	title: string
 	mandatory: boolean
-	type: TypeQuestion
-	question: string
+	type: TypeOfQuestion
+	// question: string
 	options: string[]
 }
 
@@ -19,3 +23,5 @@ export type SelectType = {
 	value: string
 	label: string
 }
+
+export type Form = z.infer<typeof formSchema>
