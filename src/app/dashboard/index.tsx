@@ -1,32 +1,25 @@
 import { FC } from 'react'
 import { Link } from 'react-router'
 import { SiGoogleforms } from 'react-icons/si'
-// import { LuChevronDown } from 'react-icons/lu'
 import {
 	Flex,
+	Text,
 	Group,
 	VStack,
 	HStack,
 	Heading,
 	LinkBox,
 	SimpleGrid,
-	LinkOverlay,
-	Text
-	// IconButton
+	LinkOverlay
 } from '@chakra-ui/react'
 
 import { useAuth } from '@/hooks/use-auth'
 import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { EmptyState } from '@/components/ui/empty-state'
 import { HeaderAuth } from '@/components/app/header/auth'
 import { useGetAllForms } from '@/hooks/swr/useGetAllForms'
-// import {
-// 	MenuItem,
-// 	MenuRoot,
-// 	MenuTrigger,
-// 	MenuContent
-// } from '@/components/ui/menu'
 
 export const Dashboard: FC = (): JSX.Element => {
 	const { user } = useAuth()
@@ -34,7 +27,7 @@ export const Dashboard: FC = (): JSX.Element => {
 
 	return (
 		<VStack minH='100vh' w='full'>
-			<HeaderAuth />
+			<HeaderAuth showSearch />
 
 			<Flex px={4} pt={4} pb={8} flex={1} w='full'>
 				<VStack w='full' mx='auto' maxW='breakpoint-xl'>
@@ -79,10 +72,11 @@ export const Dashboard: FC = (): JSX.Element => {
 								Ocorreu um erro ao carregar os formulários recentes do servidor.
 							</Alert>
 						) : data && data.length <= 0 ? (
-							<Alert status='info' title='Nenhum formulário encontrado'>
-								Você ainda não criou nenhum formulário. Clique no botão "Criar
-								formulário" para começar.
-							</Alert>
+							<EmptyState
+								icon={<SiGoogleforms size={32} />}
+								title='Nenhum formulário encontrado'
+								description='Você ainda não criou nenhum formulário. Crie um formulário para começar a coletar respostas.'
+							/>
 						) : (
 							data &&
 							data.length > 0 && (

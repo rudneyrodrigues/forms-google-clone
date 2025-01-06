@@ -1,8 +1,9 @@
 import { FC, useState } from 'react'
 import { MdVerified } from 'react-icons/md'
 import { GoUnverified } from 'react-icons/go'
+import { FaMoon, FaSun } from 'react-icons/fa6'
 import { LuMail, LuUser } from 'react-icons/lu'
-import { getAuth, sendEmailVerification } from 'firebase/auth'
+import { getAuth, sendEmailVerification, updateProfile } from 'firebase/auth'
 import {
 	Flex,
 	Text,
@@ -21,7 +22,10 @@ import { Avatar } from '@/components/ui/avatar'
 import { toaster } from '@/components/ui/toaster'
 import { InputGroup } from '@/components/ui/input-group'
 import { HeaderAuth } from '@/components/app/header/auth'
+import { useColorMode } from '@/components/ui/color-mode'
 import avatarDefault from '@/assets/images/avatar-default.png'
+import { RadioCardItem, RadioCardRoot } from '@/components/ui/radio-card'
+import { DialogDeleteAccount } from '@/components/app/dialog/delete-account'
 import {
 	ClipboardRoot,
 	ClipboardInput,
@@ -29,12 +33,49 @@ import {
 } from '@/components/ui/clipboard'
 
 export const Profile: FC = (): JSX.Element => {
+	const auth = getAuth()
 	const { user } = useAuth()
+	const { colorMode, setColorMode } = useColorMode()
 	const [isLoading, setIsLoading] = useState(false)
+	const [displayName, setDisplayName] = useState(user.displayName)
+
+	const handleUpdateDisplayName = async () => {
+		setIsLoading(true)
+
+		if (!auth.currentUser) return setIsLoading(false)
+
+		await updateProfile(auth.currentUser, {
+			displayName: displayName?.trim()
+		})
+			.then(() => {
+				toaster.success({
+					description: 'Nome de exibição atualizado com sucesso!',
+					type: 'success',
+					action: {
+						label: 'Fechar',
+						onClick: () => {}
+					}
+				})
+			})
+			.catch(error => {
+				console.error(error)
+
+				toaster.error({
+					description: 'Ocorreu um erro ao atualizar o nome de exibição.',
+					type: 'error',
+					action: {
+						label: 'Fechar',
+						onClick: () => {}
+					}
+				})
+			})
+			.finally(() => {
+				setIsLoading(false)
+			})
+	}
 
 	const handleVerifyEmail = async () => {
 		setIsLoading(true)
-		const auth = getAuth()
 
 		if (!auth.currentUser) return setIsLoading(false)
 
@@ -69,7 +110,7 @@ export const Profile: FC = (): JSX.Element => {
 
 	return (
 		<VStack minH='100vh' w='full'>
-			<HeaderAuth />
+			<HeaderAuth showSearch />
 
 			<Flex px={4} pt={4} pb={8} flex={1} w='full'>
 				<VStack w='full' mx='auto' maxW='breakpoint-md' gap={8}>
@@ -135,8 +176,9 @@ export const Profile: FC = (): JSX.Element => {
 									<InputGroup w='full' maxW='xs' startElement={<LuUser />}>
 										<Input
 											type='text'
-											defaultValue={user?.displayName || ''}
-											placeholder={user?.displayName || 'Nome'}
+											value={displayName || ''}
+											placeholder={displayName || 'Nome'}
+											onChange={e => setDisplayName(e.target.value)}
 										/>
 									</InputGroup>
 								</Field>
@@ -151,13 +193,21 @@ export const Profile: FC = (): JSX.Element => {
 								w='full'
 								gap={4}
 								justify='space-between'
+								align={['start', 'center']}
 								direction={['column', 'row']}
 							>
 								<Text as='span' color='fg.muted' fontSize='sm'>
 									Por favor, uso no máximo 32 caracteres.
 								</Text>
 
-								<Button w={['full', 'auto']} size='sm'>
+								<Button
+									size='sm'
+									loading={isLoading}
+									w={['full', 'auto']}
+									loadingText='Atualizando'
+									onClick={handleUpdateDisplayName}
+									disabled={user.displayName === displayName?.trim()}
+								>
 									Salvar
 								</Button>
 							</Stack>
@@ -176,7 +226,7 @@ export const Profile: FC = (): JSX.Element => {
 									</HStack>
 
 									<Text fontSize='sm' color='fg.muted'>
-										Seu e-mail é usado para fazer login e receber notificações.
+										Usado para fazer login e receber notificações.
 									</Text>
 								</VStack>
 
@@ -227,6 +277,55 @@ export const Profile: FC = (): JSX.Element => {
 						<VStack w='full' borderWidth={1} borderRadius='md'>
 							<VStack p={8} gap={6} w='full' align='start'>
 								<VStack align='start' gap={0}>
+									<Heading fontWeight='bold'>Tema</Heading>
+
+									<Text fontSize='sm' color='fg.muted'>
+										Escolha o tema que você mais gosta.
+									</Text>
+								</VStack>
+
+								<RadioCardRoot
+									w='full'
+									value={colorMode}
+									orientation='horizontal'
+									onValueChange={e => {
+										setColorMode(e.value)
+									}}
+								>
+									<Stack
+										w='full'
+										direction={{
+											base: 'column',
+											md: 'row'
+										}}
+										align={{
+											base: 'center',
+											md: 'start'
+										}}
+										gap={4}
+									>
+										<RadioCardItem
+											w='full'
+											value='light'
+											indicator={false}
+											label='Tema claro'
+											icon={<FaSun size={20} />}
+										/>
+										<RadioCardItem
+											w='full'
+											value='dark'
+											indicator={false}
+											label='Tema escuro'
+											icon={<FaMoon size={20} />}
+										/>
+									</Stack>
+								</RadioCardRoot>
+							</VStack>
+						</VStack>
+
+						<VStack w='full' borderWidth={1} borderRadius='md'>
+							<VStack p={8} gap={6} w='full' align='start'>
+								<VStack align='start' gap={0}>
 									<Heading fontWeight='bold'>Forms ID</Heading>
 
 									<Text fontSize='sm' color='fg.muted'>
@@ -251,6 +350,42 @@ export const Profile: FC = (): JSX.Element => {
 								<Text as='span' color='fg.muted' fontSize='sm'>
 									Usado ao interagir com a API do Forms.
 								</Text>
+							</HStack>
+						</VStack>
+
+						<VStack
+							w='full'
+							borderWidth={1}
+							borderRadius='md'
+							borderColor='border.error'
+						>
+							<VStack p={8} gap={6} w='full' align='start'>
+								<VStack align='start' gap={0}>
+									<Heading fontWeight='bold'>Deletar conta</Heading>
+
+									<Text fontSize='sm' color='fg.muted'>
+										Remova permanentemente sua conta e seu conteúdo do Forms.
+										Esta não é uma ação reversível, então continue com cautela.
+									</Text>
+								</VStack>
+							</VStack>
+
+							<HStack
+								px={8}
+								py={4}
+								w='full'
+								bg='bg.error'
+								roundedBottom='md'
+								borderTopWidth={1}
+								justifyContent='end'
+								justify='space-between'
+								borderTopColor='border.error'
+							>
+								<DialogDeleteAccount>
+									<Button w={['full', 'auto']} colorPalette='red'>
+										Deletar conta
+									</Button>
+								</DialogDeleteAccount>
 							</HStack>
 						</VStack>
 					</VStack>

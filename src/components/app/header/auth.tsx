@@ -9,10 +9,11 @@ import { InputGroup } from '@/components/ui/input-group'
 
 interface HeaderAuthProps {
 	title?: string
+	showSearch?: boolean
 }
 
 export const HeaderAuth: FC<HeaderAuthProps> = memo(
-	({ title }: HeaderAuthProps): JSX.Element => {
+	({ title, showSearch = false }: HeaderAuthProps): JSX.Element => {
 		return (
 			<HStack
 				px={8}
@@ -44,17 +45,19 @@ export const HeaderAuth: FC<HeaderAuthProps> = memo(
 						</Link>
 					</ChakraLink>
 
-					<HStack w='full' mx={[2, 4, 8]} maxW='breakpoint-sm'>
-						<InputGroup w='full' startElement={<FaMagnifyingGlass />}>
-							<Input
-								bg='bg.muted'
-								type='search'
-								border='none'
-								rounded='full'
-								placeholder='Pesquisar'
-							/>
-						</InputGroup>
-					</HStack>
+					{showSearch && (
+						<HStack w='full' mx={[2, 4, 8]} maxW='breakpoint-sm'>
+							<InputGroup w='full' startElement={<FaMagnifyingGlass />}>
+								<Input
+									bg='bg.muted'
+									type='search'
+									border='none'
+									rounded='full'
+									placeholder='Pesquisar'
+								/>
+							</InputGroup>
+						</HStack>
+					)}
 
 					<HStack ml='auto'>
 						<UserMenu />

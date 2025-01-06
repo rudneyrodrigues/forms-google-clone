@@ -41,13 +41,15 @@ export const UserMenu: FC = memo((): JSX.Element => {
 					<MenuItem value='profile' asChild>
 						<Link to='/profile'>Meu perfil</Link>
 					</MenuItem>
-					<MenuItem value='settings'>Configurações</MenuItem>
+					{/* <MenuItem value='settings'>Configurações</MenuItem> */}
 				</MenuItemGroup>
 
 				<MenuSeparator />
 
 				<MenuItemGroup>
-					<MenuItem value='forms'>Formulários</MenuItem>
+					<MenuItem value='forms' asChild>
+						<Link to='/dashboard'>Formulários</Link>
+					</MenuItem>
 					<MenuItem value='results'>Resultados</MenuItem>
 				</MenuItemGroup>
 
