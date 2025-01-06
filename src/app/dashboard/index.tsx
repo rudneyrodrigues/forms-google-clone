@@ -1,14 +1,17 @@
 import { FC } from 'react'
 import { Link } from 'react-router'
+import { MdMoreVert } from 'react-icons/md'
 import { SiGoogleforms } from 'react-icons/si'
 import {
 	Flex,
 	Text,
 	Group,
+	Float,
 	VStack,
 	HStack,
 	Heading,
 	LinkBox,
+	IconButton,
 	SimpleGrid,
 	LinkOverlay
 } from '@chakra-ui/react'
@@ -20,6 +23,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/empty-state'
 import { HeaderAuth } from '@/components/app/header/auth'
 import { useGetAllForms } from '@/hooks/swr/useGetAllForms'
+import { MoreFormDashboard } from '@/components/app/menu/more-form-dashboard'
 
 export const Dashboard: FC = (): JSX.Element => {
 	const { user } = useAuth()
@@ -89,6 +93,7 @@ export const Dashboard: FC = (): JSX.Element => {
 											display='flex'
 											borderWidth={1}
 											flexDir='column'
+											position='relative'
 											transition='colors'
 											borderColor='border'
 											justifyContent='space-between'
@@ -99,7 +104,7 @@ export const Dashboard: FC = (): JSX.Element => {
 											<HStack
 												w='full'
 												roundedTop={4}
-												bg='bg.muted'
+												bg='bg.muted/40'
 												justify='center'
 												aspectRatio={[16 / 9, 4 / 3, 2 / 1]}
 											>
@@ -125,6 +130,14 @@ export const Dashboard: FC = (): JSX.Element => {
 													</LinkOverlay>
 												</Button>
 											</VStack>
+
+											<MoreFormDashboard form={form}>
+												<Float offset={6}>
+													<IconButton size='sm' variant='ghost'>
+														<MdMoreVert />
+													</IconButton>
+												</Float>
+											</MoreFormDashboard>
 										</LinkBox>
 									))}
 								</SimpleGrid>

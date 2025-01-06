@@ -25,3 +25,15 @@ export type SelectType = {
 }
 
 export type Form = z.infer<typeof formSchema>
+
+export type FormData = {
+	id: string
+	title: string
+	description?: string
+	questions: {
+		[key: string]: TypeQuestions
+	}
+	visibility: 'public' | 'private'
+	createdBy: string
+	createdAt: Date
+}

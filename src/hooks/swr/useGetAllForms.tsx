@@ -2,19 +2,7 @@ import useSWR from 'swr'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
 import { db } from '@/service/firebase'
-import { TypeQuestions } from '@/config/types'
-
-type FormData = {
-	id: string
-	title: string
-	description?: string
-	questions: {
-		[key: string]: TypeQuestions
-	}
-	visibility: 'public' | 'private'
-	createdBy: string
-	createdAt: Date
-}
+import { FormData } from '@/config/types'
 
 interface UseGetAllFormsProps {
 	userId: string

@@ -1,4 +1,5 @@
 import { FC, memo } from 'react'
+import { Link } from 'react-router'
 import { Text } from '@chakra-ui/react'
 
 import { useAuth } from '@/hooks/use-auth'
@@ -12,7 +13,6 @@ import {
 	MenuItemGroup,
 	MenuSeparator
 } from '@/components/ui/menu'
-import { Link } from 'react-router'
 
 export const UserMenu: FC = memo((): JSX.Element => {
 	const { user, logout } = useAuth()
