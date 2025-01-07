@@ -1,9 +1,13 @@
 import { Input } from '@chakra-ui/react'
+import { doc, updateDoc } from 'firebase/firestore'
 import { FC, memo, ReactNode, useState } from 'react'
 
+import { db } from '@/service/firebase'
 import { Field } from '@/components/ui/field'
 import { Button } from '@/components/ui/button'
+import { toaster } from '@/components/ui/toaster'
 import { InputGroup } from '@/components/ui/input-group'
+import { useGetAllForms } from '@/hooks/swr/useGetAllForms'
 import {
 	DialogBody,
 	DialogRoot,
@@ -16,16 +20,66 @@ import {
 } from '@/components/ui/dialog'
 
 interface DialogRenameFormProps {
+	formId: string
 	children: ReactNode
 	defaultTitle: string
 }
 
 export const DialogRenameForm: FC<DialogRenameFormProps> = memo(
-	({ children, defaultTitle }: DialogRenameFormProps): JSX.Element => {
+	({ formId, children, defaultTitle }: DialogRenameFormProps): JSX.Element => {
+		const { mutate } = useGetAllForms()
+		const [open, setOpen] = useState(false)
+		const [loading, setLoading] = useState(false)
 		const [title, setTitle] = useState(defaultTitle)
 
+		const handleRenameForm = async () => {
+			setLoading(true)
+
+			try {
+				const formRef = doc(db, 'forms', formId)
+
+				await updateDoc(formRef, {
+					title: title.trim()
+				})
+
+				toaster.success({
+					description: 'Formulário renomeado com sucesso!',
+					action: {
+						label: 'Ok 😄',
+						onClick: () => {}
+					}
+				})
+
+				mutate()
+				setOpen(false)
+			} catch (error) {
+				console.error(error)
+
+				toaster.error({
+					description: 'Ocorreu um erro ao tentar renomear o formulário.',
+					action: {
+						label: 'Ok 😢',
+						onClick: () => {}
+					}
+				})
+			} finally {
+				setLoading(false)
+			}
+		}
+
 		return (
-			<DialogRoot placement='center' motionPreset='scale'>
+			<DialogRoot
+				lazyMount
+				open={open}
+				placement='center'
+				motionPreset='scale'
+				onOpenChange={e => {
+					setOpen(e.open)
+					if (!e.open) {
+						setTitle(defaultTitle)
+					}
+				}}
+			>
 				<DialogTrigger asChild>{children}</DialogTrigger>
 
 				<DialogContent>
@@ -54,6 +108,9 @@ export const DialogRenameForm: FC<DialogRenameFormProps> = memo(
 						</DialogActionTrigger>
 
 						<Button
+							loading={loading}
+							onClick={handleRenameForm}
+							loadingText='Renomeando...'
 							disabled={title.trim() === defaultTitle || title.length <= 2}
 						>
 							Renomear

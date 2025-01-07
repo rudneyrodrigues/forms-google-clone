@@ -16,7 +16,6 @@ import {
 	LinkOverlay
 } from '@chakra-ui/react'
 
-import { useAuth } from '@/hooks/use-auth'
 import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -26,8 +25,7 @@ import { useGetAllForms } from '@/hooks/swr/useGetAllForms'
 import { MoreFormDashboard } from '@/components/app/menu/more-form-dashboard'
 
 export const Dashboard: FC = (): JSX.Element => {
-	const { user } = useAuth()
-	const { data, error, isLoading } = useGetAllForms({ userId: user.uid })
+	const { data, error, isLoading } = useGetAllForms()
 
 	return (
 		<VStack minH='100vh' w='full'>

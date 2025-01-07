@@ -23,7 +23,9 @@ import {
 	VStack,
 	HStack,
 	Separator,
-	IconButton
+	IconButton,
+	Float,
+	Circle
 } from '@chakra-ui/react'
 
 type QuestionsProps = {
@@ -60,14 +62,21 @@ export const Questions: FC<QuestionsProps> = memo(
 	}: QuestionsProps): JSX.Element => {
 		return (
 			<VStack
-				w='full'
 				p={4}
+				w='full'
 				key={index}
 				rounded='md'
 				border='1px solid'
+				position='relative'
 				borderColor='border'
 				animation='fade-in 300ms ease-in-out'
 			>
+				<Float placement='top-start'>
+					<Circle size={6} borderWidth={1} bg='bg.muted' color='white'>
+						{index + 1}
+					</Circle>
+				</Float>
+
 				<Stack
 					mb={4}
 					w='full'
@@ -76,8 +85,8 @@ export const Questions: FC<QuestionsProps> = memo(
 				>
 					<Field
 						w='full'
-						invalid={!!errors.title}
-						errorText={errors.title?.message}
+						invalid={!!errors.questions?.[index]?.title}
+						errorText={errors.questions?.[index]?.title?.message}
 					>
 						<InputGroup w='full'>
 							<Input

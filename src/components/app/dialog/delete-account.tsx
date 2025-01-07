@@ -91,9 +91,7 @@ export const DialogDeleteAccount: FC<DialogDeleteAccountProps> = memo(
 						<VStack gap={4} w='full' align='start'>
 							<Text fontSize='md'>
 								O Forms{' '}
-								<Mark variant='subtle' color='fg.error'>
-									excluíra todos os seus formulários
-								</Mark>{' '}
+								<Mark variant='subtle'>excluíra todos os seus formulários</Mark>{' '}
 								e dados permanentemente. Esta ação não pode ser desfeita.
 							</Text>
 
@@ -109,7 +107,14 @@ export const DialogDeleteAccount: FC<DialogDeleteAccountProps> = memo(
 						</VStack>
 
 						<VStack w='full' align='start' mt={8}>
-							<Field label='Para verificar, digite Deletar minha conta pessoal abaixo:'>
+							<Text>
+								Para verificar, digite{' '}
+								<Mark variant='subtle' color='fg.error'>
+									Deletar minha conta pessoal
+								</Mark>{' '}
+								abaixo:
+							</Text>
+							<Field>
 								<InputGroup w='full'>
 									<Input
 										type='text'

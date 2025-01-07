@@ -3,7 +3,9 @@ import { FC, memo, ReactNode } from 'react'
 import { LuExternalLink } from 'react-icons/lu'
 import { MdDeleteOutline, MdTitle } from 'react-icons/md'
 
+import { FormData } from '@/config/types'
 import { DialogRenameForm } from '../dialog/rename-form'
+import { DialogDeleteForm } from '../dialog/delete-form'
 import {
 	MenuItem,
 	MenuRoot,
@@ -12,7 +14,6 @@ import {
 	MenuSeparator,
 	MenuContextTrigger
 } from '@/components/ui/menu'
-import { FormData } from '@/config/types'
 
 interface MoreFormDashboardProps {
 	form: FormData
@@ -31,7 +32,7 @@ export const MoreFormDashboard: FC<MoreFormDashboardProps> = memo(
 				)}
 
 				<MenuContent minW='14rem'>
-					<DialogRenameForm defaultTitle={form.title}>
+					<DialogRenameForm formId={form.id} defaultTitle={form.title}>
 						<MenuItem value='rename'>
 							<MdTitle size={20} />
 							Renomear
@@ -46,17 +47,19 @@ export const MoreFormDashboard: FC<MoreFormDashboardProps> = memo(
 
 					<MenuSeparator />
 
-					<MenuItem
-						value='delete'
-						color='fg.error'
-						_hover={{
-							bg: 'bg.error',
-							color: 'fg.error'
-						}}
-					>
-						<MdDeleteOutline size={20} />
-						Deletar projeto
-					</MenuItem>
+					<DialogDeleteForm formId={form.id} title={form.title}>
+						<MenuItem
+							value='delete'
+							color='fg.error'
+							_hover={{
+								bg: 'bg.error',
+								color: 'fg.error'
+							}}
+						>
+							<MdDeleteOutline size={20} />
+							Deletar projeto
+						</MenuItem>
+					</DialogDeleteForm>
 				</MenuContent>
 			</MenuRoot>
 		)
