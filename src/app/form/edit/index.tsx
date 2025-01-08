@@ -43,6 +43,7 @@ export const FormEdit: FC = (): JSX.Element => {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			title: data.title,
+			description: data.description,
 			questions: data.questions
 		}
 	})
