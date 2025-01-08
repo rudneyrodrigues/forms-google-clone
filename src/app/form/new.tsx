@@ -20,10 +20,11 @@ import { Field } from '@/components/ui/field'
 import { formSchema } from '@/config/schemas'
 import { Button } from '@/components/ui/button'
 import { toaster } from '@/components/ui/toaster'
+import { addQuestion } from '@/utils/add-question'
+import { TypeQuestions, Form } from '@/config/types'
 import { InputGroup } from '@/components/ui/input-group'
 import { HeaderAuth } from '@/components/app/header/auth'
 import { Questions } from '@/components/app/forms/questions'
-import { TypeQuestions, TypeOfQuestion, Form } from '@/config/types'
 import {
 	ActionBarRoot,
 	ActionBarContent,
@@ -58,33 +59,6 @@ export const FormNew: FC = (): JSX.Element => {
 
 	const watchTitle = watch('title')
 	const watchQuestions = watch('questions')
-
-	const addQuestion = (type: TypeOfQuestion) => {
-		const newQuestion = {
-			id: crypto.randomUUID(),
-			title: 'Pergunta sem título',
-			mandatory: false,
-			type,
-			options: ['']
-		}
-
-		const currentQuestions = getValues('questions') as TypeQuestions[]
-		setValue('questions', [...currentQuestions, newQuestion], {
-			shouldDirty: true
-		})
-	}
-
-	const removeQuestion = (id: string) => {
-		const currentQuestions = getValues('questions') as TypeQuestions[]
-
-		setValue(
-			'questions',
-			currentQuestions.filter(question => question.id !== id),
-			{
-				shouldDirty: true
-			}
-		)
-	}
 
 	const onSubmitForm: SubmitHandler<Form> = async values => {
 		const { title, description, questions } = values
@@ -156,7 +130,7 @@ export const FormNew: FC = (): JSX.Element => {
 		<VStack minH='100vh' w='full'>
 			<HeaderAuth title={watchTitle} />
 
-			<Flex px={4} pt={4} pb={8} flex={1} w='full'>
+			<Flex px={4} pt={4} pb={12} flex={1} w='full'>
 				<VStack
 					w='full'
 					mx='auto'
@@ -217,11 +191,11 @@ export const FormNew: FC = (): JSX.Element => {
 								index={index}
 								errors={errors}
 								key={question.id}
-								setValue={setValue}
 								question={question}
 								register={register}
+								setValue={setValue}
+								getValues={getValues}
 								watchQuestions={watchQuestions}
-								removeQuestion={removeQuestion}
 							/>
 						))}
 
@@ -229,6 +203,7 @@ export const FormNew: FC = (): JSX.Element => {
 							<Button
 								size='sm'
 								type='submit'
+								w={['full', 'auto']}
 								loading={isSubmitting}
 								loadingText='Publicando'
 							>
@@ -243,7 +218,9 @@ export const FormNew: FC = (): JSX.Element => {
 								size='sm'
 								variant='ghost'
 								disabled={isSubmitting}
-								onClick={() => addQuestion('short-text')}
+								onClick={() =>
+									addQuestion({ setValue, getValues, type: 'short-text' })
+								}
 							>
 								<LuPlus />
 								Adicionar

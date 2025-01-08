@@ -1,7 +1,12 @@
 import { FC, memo } from 'react'
 import { LuTrash } from 'react-icons/lu'
-import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 import { MdCheckBoxOutlineBlank, MdRadioButtonUnchecked } from 'react-icons/md'
+import {
+	FieldErrors,
+	UseFormRegister,
+	UseFormSetValue,
+	UseFormGetValues
+} from 'react-hook-form'
 
 import { Field } from '@/components/ui/field'
 import { formSelectType } from '@/config/site'
@@ -9,6 +14,7 @@ import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Form, TypeOfQuestion } from '@/config/types'
 import { InputGroup } from '@/components/ui/input-group'
+import { removeQuestion } from '@/utils/remove-question'
 import {
 	SelectItem,
 	SelectRoot,
@@ -20,17 +26,16 @@ import {
 	Text,
 	Input,
 	Stack,
+	Float,
+	Circle,
 	VStack,
 	HStack,
 	Separator,
-	IconButton,
-	Float,
-	Circle
+	IconButton
 } from '@chakra-ui/react'
 
 type QuestionsProps = {
 	index: number
-	removeQuestion: (id: string) => void
 	question: {
 		title: string
 		id: string
@@ -41,6 +46,7 @@ type QuestionsProps = {
 	errors: FieldErrors<Form>
 	register: UseFormRegister<Form>
 	setValue: UseFormSetValue<Form>
+	getValues: UseFormGetValues<Form>
 	watchQuestions: {
 		title: string
 		id: string
@@ -54,11 +60,11 @@ export const Questions: FC<QuestionsProps> = memo(
 	({
 		index,
 		errors,
-		setValue,
 		question,
 		register,
-		watchQuestions,
-		removeQuestion
+		setValue,
+		getValues,
+		watchQuestions
 	}: QuestionsProps): JSX.Element => {
 		return (
 			<VStack
@@ -72,7 +78,7 @@ export const Questions: FC<QuestionsProps> = memo(
 				animation='fade-in 300ms ease-in-out'
 			>
 				<Float placement='top-start'>
-					<Circle size={6} borderWidth={1} bg='bg.muted' color='white'>
+					<Circle size={6} borderWidth={1} bg='bg.muted' color='fg.muted'>
 						{index + 1}
 					</Circle>
 				</Float>
@@ -250,7 +256,13 @@ export const Questions: FC<QuestionsProps> = memo(
 						size='sm'
 						variant='ghost'
 						disabled={watchQuestions.length === 1}
-						onClick={() => removeQuestion(question.id)}
+						onClick={() =>
+							removeQuestion({
+								setValue,
+								getValues,
+								id: question.id
+							})
+						}
 					>
 						<LuTrash />
 					</IconButton>

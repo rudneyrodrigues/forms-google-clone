@@ -9,6 +9,8 @@ import { FormEdit } from '@/app/form/edit'
 import { Dashboard } from '@/app/dashboard'
 import { PrivateRoutes } from './private-routes'
 import { RedirectLogin } from './redirect-login'
+import { ErrorFormEdit } from '@/app/form/edit/error'
+import { loaderFormEdit } from '@/app/form/edit/loader'
 
 export const router = createBrowserRouter([
 	{
@@ -43,7 +45,9 @@ export const router = createBrowserRouter([
 							},
 							{
 								path: ':id',
-								element: <FormEdit />
+								element: <FormEdit />,
+								loader: loaderFormEdit,
+								errorElement: <ErrorFormEdit />
 							}
 						]
 					},

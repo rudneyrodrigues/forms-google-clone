@@ -1,20 +1,27 @@
 import { FC } from 'react'
 import { LuPlus } from 'react-icons/lu'
-import { useParams } from 'react-router'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Flex, Group, Input, Separator, Text, VStack } from '@chakra-ui/react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { useLoaderData, useNavigation } from 'react-router'
+import {
+	Flex,
+	Text,
+	Group,
+	Input,
+	HStack,
+	VStack,
+	Separator
+} from '@chakra-ui/react'
 
-import { Form } from '@/config/types'
-import { Alert } from '@/components/ui/alert'
 import { Field } from '@/components/ui/field'
 import { formSchema } from '@/config/schemas'
 import { Button } from '@/components/ui/button'
 import { addQuestion } from '@/utils/add-question'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Form, FormDataEdit } from '@/config/types'
 import { InputGroup } from '@/components/ui/input-group'
 import { HeaderAuth } from '@/components/app/header/auth'
-import { useGetFormById } from '@/hooks/swr/useGetFormById'
+import { Questions } from '@/components/app/forms/questions'
 import {
 	ActionBarRoot,
 	ActionBarContent,
@@ -22,8 +29,9 @@ import {
 } from '@/components/ui/action-bar'
 
 export const FormEdit: FC = (): JSX.Element => {
-	const { id } = useParams() as { id: string }
-	const { data, error, isLoading } = useGetFormById({ id })
+	const navigation = useNavigation()
+	const data = useLoaderData() as FormDataEdit
+	const isLoading = navigation.state === 'loading'
 	const {
 		watch,
 		register,
@@ -34,16 +42,8 @@ export const FormEdit: FC = (): JSX.Element => {
 	} = useForm<Form>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			title: data?.title || 'Formulário sem título',
-			questions: data?.questions || [
-				{
-					id: '1',
-					title: 'Pergunta sem título',
-					mandatory: false,
-					type: 'short-text',
-					options: ['']
-				}
-			]
+			title: data.title,
+			questions: data.questions
 		}
 	})
 
@@ -66,23 +66,6 @@ export const FormEdit: FC = (): JSX.Element => {
 		)
 	}
 
-	if (error || !data) {
-		return (
-			<VStack minH='100vh' w='full'>
-				<HeaderAuth />
-
-				<Flex px={4} pt={4} pb={8} flex={1} w='full'>
-					<VStack w='full' mx='auto' maxW='breakpoint-md'>
-						<Alert
-							status='error'
-							title='Ocorreu um erro ao carregar as informações do formulário'
-						/>
-					</VStack>
-				</Flex>
-			</VStack>
-		)
-	}
-
 	const onSubmitForm: SubmitHandler<Form> = async values => {
 		const { title, description, questions } = values
 
@@ -93,11 +76,11 @@ export const FormEdit: FC = (): JSX.Element => {
 		<VStack minH='100vh' w='full'>
 			<HeaderAuth title={watchTitle} />
 
-			<Flex px={4} pt={4} pb={8} flex={1} w='full'>
+			<Flex px={4} pt={4} pb={12} flex={1} w='full'>
 				<VStack
-					as='form'
 					w='full'
 					mx='auto'
+					as='form'
 					maxW='breakpoint-md'
 					onSubmit={handleSubmit(onSubmitForm)}
 				>
@@ -148,7 +131,32 @@ export const FormEdit: FC = (): JSX.Element => {
 
 					<Separator my={8} variant='dashed' />
 
-					<VStack w='full' mb={14} align='start' spaceY={6}></VStack>
+					<VStack w='full' mb={14} align='start' spaceY={6}>
+						{watchQuestions.map((question, index) => (
+							<Questions
+								index={index}
+								errors={errors}
+								key={question.id}
+								question={question}
+								register={register}
+								setValue={setValue}
+								getValues={getValues}
+								watchQuestions={watchQuestions}
+							/>
+						))}
+
+						<HStack w='full' justify='end'>
+							<Button
+								size='sm'
+								type='submit'
+								w={['full', 'auto']}
+								loading={isSubmitting}
+								loadingText='Atualizando'
+							>
+								Atualizar formulário
+							</Button>
+						</HStack>
+					</VStack>
 
 					<ActionBarRoot open={true}>
 						<ActionBarContent>

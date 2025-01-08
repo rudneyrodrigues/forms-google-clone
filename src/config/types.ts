@@ -37,3 +37,7 @@ export type FormData = {
 	createdBy: string
 	createdAt: Date
 }
+
+export type FormDataEdit = {
+	questions: TypeQuestions[]
+} & Omit<FormData, 'questions'>
