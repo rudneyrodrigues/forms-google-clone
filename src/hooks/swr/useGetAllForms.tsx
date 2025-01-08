@@ -24,7 +24,6 @@ export const useGetAllForms = () => {
 	}
 
 	const { data, error, mutate, isLoading } = useSWR('forms', fetch, {
-		revalidateOnFocus: false,
 		shouldRetryOnError: false
 	})
 
