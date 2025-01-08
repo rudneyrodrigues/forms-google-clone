@@ -9,10 +9,12 @@ import {
 	onAuthStateChanged,
 	GoogleAuthProvider,
 	signInWithEmailAndPassword,
-	createUserWithEmailAndPassword
+	createUserWithEmailAndPassword,
+	sendPasswordResetEmail
 } from 'firebase/auth'
 
 import { auth } from '@/service/firebase'
+import { toaster } from '@/components/ui/toaster'
 
 interface AuthProviderProps {
 	children: ReactNode
@@ -23,6 +25,7 @@ export interface AuthContextData {
 	loading: boolean
 	logout: () => Promise<void>
 	loginWithGoogle: () => Promise<void>
+	forgotPassword: (email: string) => Promise<void>
 	login: (email: string, password: string) => Promise<void>
 	register: (email: string, password: string, name: string) => Promise<void>
 }
@@ -135,6 +138,33 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		}
 	}
 
+	const forgotPassword = async (email: string) => {
+		await sendPasswordResetEmail(auth, email)
+			.then(() => {
+				toaster.success({
+					title: 'E-mail enviado!',
+					description:
+						'Verifique sua caixa de entrada para redefinir sua senha',
+					action: {
+						label: 'Ok',
+						onClick: () => {}
+					}
+				})
+			})
+			.catch(error => {
+				console.log(error)
+
+				toaster.error({
+					title: 'Erro ao enviar e-mail',
+					description: 'Verifique se o e-mail está correto e tente novamente',
+					action: {
+						label: 'Ok',
+						onClick: () => {}
+					}
+				})
+			})
+	}
+
 	const logout = async () => {
 		setLoading(true)
 
@@ -183,7 +213,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
 	return (
 		<AuthContext.Provider
-			value={{ user, loading, login, register, loginWithGoogle, logout }}
+			value={{
+				user,
+				loading,
+				login,
+				register,
+				forgotPassword,
+				loginWithGoogle,
+				logout
+			}}
 		>
 			{children}
 		</AuthContext.Provider>

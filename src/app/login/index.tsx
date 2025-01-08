@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button'
 import { InputGroup } from '@/components/ui/input-group'
 import { ColorModeButton } from '@/components/ui/color-mode'
 import { PasswordInput } from '@/components/ui/password-input'
+import { DialogForgotPassword } from '@/components/app/dialog/forgot-password'
 
 const loginSchema = z.object({
 	email: z.string().email({ message: 'E-mail inválido' }).trim(),
@@ -110,6 +111,23 @@ export const Login: FC = (): JSX.Element => {
 							</InputGroup>
 						</Field>
 
+						<DialogForgotPassword>
+							<Text fontSize='sm' color='fg.muted'>
+								<ChakraLink>Esqueceu a senha?</ChakraLink>
+							</Text>
+						</DialogForgotPassword>
+					</VStack>
+
+					<VStack w='full' align='start'>
+						<Button
+							w='full'
+							type='submit'
+							loading={loading}
+							loadingText='Entrando...'
+						>
+							Entrar
+						</Button>
+
 						<Text fontSize='sm' color='fg.muted'>
 							Não possui uma conta?{' '}
 							<ChakraLink asChild>
@@ -117,15 +135,6 @@ export const Login: FC = (): JSX.Element => {
 							</ChakraLink>
 						</Text>
 					</VStack>
-
-					<Button
-						w='full'
-						type='submit'
-						loading={loading}
-						loadingText='Entrando...'
-					>
-						Entrar
-					</Button>
 				</VStack>
 
 				<HStack my={8} w='full'>
