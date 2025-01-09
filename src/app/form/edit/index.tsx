@@ -1,36 +1,21 @@
 import { FC } from 'react'
-import { LuPlus } from 'react-icons/lu'
 import { doc, updateDoc } from 'firebase/firestore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLoaderData, useNavigation } from 'react-router'
-import {
-	Flex,
-	Text,
-	Group,
-	Input,
-	HStack,
-	VStack,
-	Separator,
-	IconButton
-} from '@chakra-ui/react'
+import { Flex, Group, Input, HStack, VStack, Separator } from '@chakra-ui/react'
 
 import { db } from '@/service/firebase'
 import { Field } from '@/components/ui/field'
 import { formSchema } from '@/config/schemas'
 import { Button } from '@/components/ui/button'
 import { toaster } from '@/components/ui/toaster'
-import { addQuestion } from '@/utils/add-question'
 import { Skeleton } from '@/components/ui/skeleton'
 import { InputGroup } from '@/components/ui/input-group'
 import { HeaderAuth } from '@/components/app/header/auth'
 import { Questions } from '@/components/app/forms/questions'
+import { FormActionBar } from '@/components/app/ActionBar/forms'
 import { Form, FormDataEdit, TypeQuestions } from '@/config/types'
-import {
-	ActionBarRoot,
-	ActionBarContent,
-	ActionBarSeparator
-} from '@/components/ui/action-bar'
 
 export const FormEdit: FC = (): JSX.Element => {
 	const navigation = useNavigation()
@@ -217,27 +202,13 @@ export const FormEdit: FC = (): JSX.Element => {
 						</HStack>
 					</VStack>
 
-					<ActionBarRoot open={true}>
-						<ActionBarContent>
-							<IconButton
-								size='sm'
-								variant='ghost'
-								disabled={isSubmitting}
-								onClick={() =>
-									addQuestion({ setValue, getValues, type: 'short-text' })
-								}
-							>
-								<LuPlus />
-							</IconButton>
-
-							<ActionBarSeparator />
-
-							<Text color='fg.muted' fontSize='xs'>
-								{watchQuestions.length}{' '}
-								{watchQuestions.length === 1 ? 'pergunta' : 'perguntas'}
-							</Text>
-						</ActionBarContent>
-					</ActionBarRoot>
+					<FormActionBar
+						formId={data.id}
+						setValue={setValue}
+						getValues={getValues}
+						isSubmitting={isSubmitting}
+						watchQuestions={watchQuestions}
+					/>
 				</VStack>
 			</Flex>
 		</VStack>
