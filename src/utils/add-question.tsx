@@ -1,43 +1,11 @@
 import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
 
-import { TypeOfQuestion, TypeQuestions } from '@/config/types'
+import { Form, TypeOfQuestion, TypeQuestions } from '@/config/types'
 
 interface AddQuestionProps {
 	type: TypeOfQuestion
-	getValues: UseFormGetValues<{
-		title: string
-		description: string
-		questions: {
-			id: string
-			title: string
-			type:
-				| 'short-text'
-				| 'paragraph'
-				| 'multiple-choice'
-				| 'checkbox'
-				| 'dropdown'
-				| 'file-upload'
-			mandatory: boolean
-			options?: string[] | undefined
-		}[]
-	}>
-	setValue: UseFormSetValue<{
-		questions: {
-			id: string
-			title: string
-			type:
-				| 'short-text'
-				| 'paragraph'
-				| 'multiple-choice'
-				| 'checkbox'
-				| 'dropdown'
-				| 'file-upload'
-			mandatory: boolean
-			options?: string[] | undefined
-		}[]
-		title: string
-		description: string
-	}>
+	setValue: UseFormSetValue<Form>
+	getValues: UseFormGetValues<Form>
 }
 
 export const addQuestion = ({
@@ -52,7 +20,7 @@ export const addQuestion = ({
 		title: 'Pergunta sem título',
 		mandatory: false,
 		type,
-		order: currentQuestions.length + 1,
+		order: currentQuestions.length,
 		options: ['']
 	}
 

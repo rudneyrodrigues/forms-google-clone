@@ -35,7 +35,7 @@ export const FormNew: FC = (): JSX.Element => {
 				{
 					id: crypto.randomUUID(),
 					title: 'Pergunta sem título',
-					order: 1,
+					order: 0,
 					mandatory: false,
 					type: 'short-text',
 					options: ['']

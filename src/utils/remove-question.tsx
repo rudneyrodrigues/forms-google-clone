@@ -1,43 +1,11 @@
 import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
 
-import { TypeQuestions } from '@/config/types'
+import { Form, TypeQuestions } from '@/config/types'
 
 interface RemoveQuestionProps {
 	id: string
-	getValues: UseFormGetValues<{
-		title: string
-		description: string
-		questions: {
-			id: string
-			title: string
-			type:
-				| 'short-text'
-				| 'paragraph'
-				| 'multiple-choice'
-				| 'checkbox'
-				| 'dropdown'
-				| 'file-upload'
-			mandatory: boolean
-			options?: string[] | undefined
-		}[]
-	}>
-	setValue: UseFormSetValue<{
-		questions: {
-			id: string
-			title: string
-			type:
-				| 'short-text'
-				| 'paragraph'
-				| 'multiple-choice'
-				| 'checkbox'
-				| 'dropdown'
-				| 'file-upload'
-			mandatory: boolean
-			options?: string[] | undefined
-		}[]
-		title: string
-		description: string
-	}>
+	setValue: UseFormSetValue<Form>
+	getValues: UseFormGetValues<Form>
 }
 
 export const removeQuestion = ({
@@ -47,11 +15,19 @@ export const removeQuestion = ({
 }: RemoveQuestionProps) => {
 	const currentQuestions = getValues('questions') as TypeQuestions[]
 
-	setValue(
-		'questions',
-		currentQuestions.filter(question => question.id !== id),
-		{
-			shouldDirty: true
-		}
+	// Filtra a questão a ser removida
+	const filteredQuestions = currentQuestions.filter(
+		question => question.id !== id
 	)
+
+	// Reorganiza a ordem das questões restantes
+	const reorderedQuestions = filteredQuestions.map((question, index) => ({
+		...question,
+		order: index
+	}))
+
+	// Atualiza o estado com as questões reorganizadas
+	setValue('questions', reorderedQuestions, {
+		shouldDirty: true
+	})
 }
