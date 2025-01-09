@@ -12,7 +12,8 @@ import {
 	Input,
 	HStack,
 	VStack,
-	Separator
+	Separator,
+	IconButton
 } from '@chakra-ui/react'
 
 import { db } from '@/service/firebase'
@@ -214,7 +215,7 @@ export const FormNew: FC = (): JSX.Element => {
 
 					<ActionBarRoot open={true}>
 						<ActionBarContent>
-							<Button
+							<IconButton
 								size='sm'
 								variant='ghost'
 								disabled={isSubmitting}
@@ -223,8 +224,7 @@ export const FormNew: FC = (): JSX.Element => {
 								}
 							>
 								<LuPlus />
-								Adicionar
-							</Button>
+							</IconButton>
 
 							<ActionBarSeparator />
 
