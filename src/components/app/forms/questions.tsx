@@ -37,10 +37,11 @@ import {
 type QuestionsProps = {
 	index: number
 	question: {
-		title: string
 		id: string
-		type: TypeOfQuestion
+		order: number
+		title: string
 		mandatory: boolean
+		type: TypeOfQuestion
 		options?: string[] | undefined
 	}
 	errors: FieldErrors<Form>
@@ -48,10 +49,11 @@ type QuestionsProps = {
 	setValue: UseFormSetValue<Form>
 	getValues: UseFormGetValues<Form>
 	watchQuestions: {
-		title: string
 		id: string
-		type: TypeOfQuestion
+		order: number
+		title: string
 		mandatory: boolean
+		type: TypeOfQuestion
 		options?: string[] | undefined
 	}[]
 }
