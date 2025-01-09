@@ -1,7 +1,5 @@
 import { FC, memo } from 'react'
-import { Link } from 'react-router'
-import { LuPlus, LuTrash } from 'react-icons/lu'
-import { MdShare } from 'react-icons/md'
+import { LuPlus } from 'react-icons/lu'
 import { IconButton, Text } from '@chakra-ui/react'
 import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
 
@@ -14,7 +12,6 @@ import {
 } from '@/components/ui/action-bar'
 
 interface FormActionBarProps {
-	formId?: string
 	isSubmitting: boolean
 	setValue: UseFormSetValue<Form>
 	getValues: UseFormGetValues<Form>
@@ -28,7 +25,6 @@ interface FormActionBarProps {
 }
 
 const FormActionBarComponent: FC<FormActionBarProps> = ({
-	formId,
 	setValue,
 	getValues,
 	isSubmitting,
@@ -47,20 +43,6 @@ const FormActionBarComponent: FC<FormActionBarProps> = ({
 				>
 					<LuPlus />
 				</IconButton>
-
-				{formId && (
-					<IconButton size='sm' variant='ghost' disabled={isSubmitting} asChild>
-						<Link to={`/form/${formId}/share`} target='_blank'>
-							<MdShare />
-						</Link>
-					</IconButton>
-				)}
-
-				{formId && (
-					<IconButton size='sm' variant='ghost'>
-						<LuTrash />
-					</IconButton>
-				)}
 
 				<ActionBarSeparator />
 

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import { FC, memo, ReactNode, useState } from 'react'
 import { Input, Mark, Text, VStack } from '@chakra-ui/react'
 
@@ -19,6 +20,7 @@ import {
 	DialogTrigger,
 	DialogActionTrigger
 } from '@/components/ui/dialog'
+import { Tooltip } from '@/components/ui/tooltip'
 
 interface DialogDeleteFormProps {
 	title: string
@@ -28,6 +30,7 @@ interface DialogDeleteFormProps {
 
 export const DialogDeleteForm: FC<DialogDeleteFormProps> = memo(
 	({ title, formId, children }: DialogDeleteFormProps): JSX.Element => {
+		const navigate = useNavigate()
 		const { mutate } = useGetAllForms()
 		const [text, setText] = useState('')
 		const [open, setOpen] = useState(false)
@@ -46,6 +49,8 @@ export const DialogDeleteForm: FC<DialogDeleteFormProps> = memo(
 						onClick: () => {}
 					}
 				})
+
+				navigate('/dashboard')
 
 				mutate()
 				setOpen(false)
@@ -75,7 +80,9 @@ export const DialogDeleteForm: FC<DialogDeleteFormProps> = memo(
 					setText('')
 				}}
 			>
-				<DialogTrigger asChild>{children}</DialogTrigger>
+				<Tooltip content='Deletar formulário'>
+					<DialogTrigger asChild>{children}</DialogTrigger>
+				</Tooltip>
 
 				<DialogContent>
 					<DialogHeader>

@@ -1,21 +1,34 @@
 import { FC } from 'react'
+import { MdShare } from 'react-icons/md'
+import { LuEye, LuTrash } from 'react-icons/lu'
 import { doc, updateDoc } from 'firebase/firestore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useLoaderData, useNavigation } from 'react-router'
-import { Flex, Group, Input, HStack, VStack, Separator } from '@chakra-ui/react'
+import { Link, useLoaderData, useNavigation } from 'react-router'
+import {
+	Flex,
+	Group,
+	Input,
+	HStack,
+	VStack,
+	Separator,
+	IconButton
+} from '@chakra-ui/react'
 
 import { db } from '@/service/firebase'
 import { Field } from '@/components/ui/field'
 import { formSchema } from '@/config/schemas'
 import { Button } from '@/components/ui/button'
 import { toaster } from '@/components/ui/toaster'
+import { Tooltip } from '@/components/ui/tooltip'
 import { Skeleton } from '@/components/ui/skeleton'
 import { InputGroup } from '@/components/ui/input-group'
 import { HeaderAuth } from '@/components/app/header/auth'
 import { Questions } from '@/components/app/forms/questions'
 import { FormActionBar } from '@/components/app/ActionBar/forms'
 import { Form, FormDataEdit, TypeQuestions } from '@/config/types'
+import { DialogDeleteForm } from '@/components/app/dialog/delete-form'
+import { ClipboardIconButton, ClipboardRoot } from '@/components/ui/clipboard'
 
 export const FormEdit: FC = (): JSX.Element => {
 	const navigation = useNavigation()
@@ -122,12 +135,37 @@ export const FormEdit: FC = (): JSX.Element => {
 
 			<Flex px={4} pt={4} pb={12} flex={1} w='full'>
 				<VStack
+					pb={16}
 					w='full'
 					mx='auto'
 					as='form'
 					maxW='breakpoint-md'
 					onSubmit={handleSubmit(onSubmitForm)}
 				>
+					<HStack mb={8} w='full' justify='end'>
+						<Tooltip content='Visualizar formulário'>
+							<IconButton variant='ghost' asChild>
+								<Link to={`/form/${data.id}/preview`} target='_blank'>
+									<LuEye />
+								</Link>
+							</IconButton>
+						</Tooltip>
+
+						<ClipboardRoot
+							value={`${window.location.origin}/form/${data.id}/share`}
+						>
+							<Tooltip content='Compartilhar link para responder'>
+								<ClipboardIconButton size='md' variant='ghost' icon={MdShare} />
+							</Tooltip>
+						</ClipboardRoot>
+
+						<DialogDeleteForm formId={data.id} title={data.title}>
+							<IconButton variant='ghost'>
+								<LuTrash />
+							</IconButton>
+						</DialogDeleteForm>
+					</HStack>
+
 					<Group
 						w='full'
 						p={[4, 8]}
@@ -175,7 +213,7 @@ export const FormEdit: FC = (): JSX.Element => {
 
 					<Separator my={8} variant='dashed' />
 
-					<VStack w='full' mb={14} align='start' spaceY={6}>
+					<VStack w='full' align='start' spaceY={6}>
 						{watchQuestions.map((question, index) => (
 							<Questions
 								index={index}
@@ -203,7 +241,6 @@ export const FormEdit: FC = (): JSX.Element => {
 					</VStack>
 
 					<FormActionBar
-						formId={data.id}
 						setValue={setValue}
 						getValues={getValues}
 						isSubmitting={isSubmitting}
