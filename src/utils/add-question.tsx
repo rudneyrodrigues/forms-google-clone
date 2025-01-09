@@ -45,15 +45,17 @@ export const addQuestion = ({
 	setValue,
 	getValues
 }: AddQuestionProps) => {
+	const currentQuestions = getValues('questions') as TypeQuestions[]
+
 	const newQuestion = {
 		id: crypto.randomUUID(),
 		title: 'Pergunta sem título',
 		mandatory: false,
 		type,
+		order: currentQuestions.length + 1,
 		options: ['']
 	}
 
-	const currentQuestions = getValues('questions') as TypeQuestions[]
 	setValue('questions', [...currentQuestions, newQuestion], {
 		shouldDirty: true
 	})

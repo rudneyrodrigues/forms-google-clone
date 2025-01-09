@@ -57,7 +57,7 @@ export const MoreFormDashboard: FC<MoreFormDashboardProps> = memo(
 							}}
 						>
 							<MdDeleteOutline size={20} />
-							Deletar projeto
+							Deletar formulário
 						</MenuItem>
 					</DialogDeleteForm>
 				</MenuContent>

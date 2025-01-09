@@ -6,6 +6,7 @@ export const formSchema = z.object({
 	questions: z.array(
 		z.object({
 			id: z.string().uuid(),
+			order: z.number(),
 			title: z.string().min(1, { message: 'Pergunta é obrigatória' }).trim(),
 			mandatory: z.boolean(),
 			type: z.enum([

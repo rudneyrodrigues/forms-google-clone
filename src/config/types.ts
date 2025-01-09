@@ -12,6 +12,7 @@ export type TypeOfQuestion =
 
 export type TypeQuestions = {
 	id: string
+	order: number
 	title: string
 	mandatory: boolean
 	type: TypeOfQuestion

@@ -44,9 +44,7 @@ export const FormEdit: FC = (): JSX.Element => {
 	} = useForm<Form>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			title: data.title,
-			description: data.description,
-			questions: data.questions
+			...data
 		}
 	})
 
@@ -154,12 +152,12 @@ export const FormEdit: FC = (): JSX.Element => {
 						<ClipboardRoot
 							value={`${window.location.origin}/form/${data.id}/share`}
 						>
-							<Tooltip content='Compartilhar link para responder'>
+							<Tooltip content='Link de compartilhamento'>
 								<ClipboardIconButton size='md' variant='ghost' icon={MdShare} />
 							</Tooltip>
 						</ClipboardRoot>
 
-						<DialogDeleteForm formId={data.id} title={data.title}>
+						<DialogDeleteForm formId={data.id} title={watchTitle}>
 							<IconButton variant='ghost'>
 								<LuTrash />
 							</IconButton>

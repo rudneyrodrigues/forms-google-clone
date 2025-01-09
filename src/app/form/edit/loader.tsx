@@ -31,5 +31,8 @@ export const loaderFormEdit = async ({
 		questions: Object.values(data.questions)
 	} as FormDataEdit
 
+	// Ordene as perguntas pelo campo order
+	newData.questions.sort((a, b) => a.order - b.order)
+
 	return newData
 }
