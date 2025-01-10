@@ -1,10 +1,17 @@
 import { FC, memo } from 'react'
-import { LuPlus } from 'react-icons/lu'
-import { IconButton, Text } from '@chakra-ui/react'
-import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
+import { IconButton } from '@chakra-ui/react'
+import { LuImage, LuPlus } from 'react-icons/lu'
+import {
+	SubmitHandler,
+	UseFormGetValues,
+	UseFormHandleSubmit,
+	UseFormSetValue
+} from 'react-hook-form'
 
+import { Form } from '@/config/types'
+import { Button } from '@/components/ui/button'
+import { Tooltip } from '@/components/ui/tooltip'
 import { addQuestion } from '@/utils/add-question'
-import { Form, TypeOfQuestion } from '@/config/types'
 import {
 	ActionBarRoot,
 	ActionBarContent,
@@ -15,41 +22,48 @@ interface FormActionBarProps {
 	isSubmitting: boolean
 	setValue: UseFormSetValue<Form>
 	getValues: UseFormGetValues<Form>
-	watchQuestions: {
-		title: string
-		id: string
-		type: TypeOfQuestion
-		mandatory: boolean
-		options?: string[] | undefined
-	}[]
+	onSubmitForm: SubmitHandler<Form>
+	handleSubmit: UseFormHandleSubmit<Form, undefined>
 }
 
 const FormActionBarComponent: FC<FormActionBarProps> = ({
 	setValue,
 	getValues,
 	isSubmitting,
-	watchQuestions
+	onSubmitForm,
+	handleSubmit
 }: FormActionBarProps): JSX.Element => {
 	return (
 		<ActionBarRoot open={true}>
 			<ActionBarContent>
-				<IconButton
-					size='sm'
-					variant='ghost'
-					disabled={isSubmitting}
-					onClick={() =>
-						addQuestion({ setValue, getValues, type: 'short-text' })
-					}
-				>
-					<LuPlus />
-				</IconButton>
+				<Tooltip content='Adicionar pergunta'>
+					<IconButton
+						variant='ghost'
+						disabled={isSubmitting}
+						onClick={() =>
+							addQuestion({ setValue, getValues, type: 'short-text' })
+						}
+					>
+						<LuPlus />
+					</IconButton>
+				</Tooltip>
+				<Tooltip content='Adicionar banner'>
+					<IconButton variant='ghost' disabled={isSubmitting}>
+						<LuImage />
+					</IconButton>
+				</Tooltip>
 
 				<ActionBarSeparator />
 
-				<Text color='fg.muted' fontSize='xs'>
-					{watchQuestions.length}{' '}
-					{watchQuestions.length === 1 ? 'pergunta' : 'perguntas'}
-				</Text>
+				<Tooltip content='Salvar'>
+					<Button
+						loading={isSubmitting}
+						loadingText='Salvando'
+						onClick={handleSubmit(onSubmitForm)}
+					>
+						Salvar
+					</Button>
+				</Tooltip>
 			</ActionBarContent>
 		</ActionBarRoot>
 	)
@@ -58,9 +72,6 @@ const FormActionBarComponent: FC<FormActionBarProps> = ({
 export const FormActionBar = memo(
 	FormActionBarComponent,
 	(prevProps, nextProps) => {
-		return (
-			prevProps.isSubmitting === nextProps.isSubmitting &&
-			prevProps.watchQuestions.length === nextProps.watchQuestions.length
-		)
+		return prevProps.isSubmitting === nextProps.isSubmitting
 	}
 )

@@ -18,7 +18,6 @@ import {
 import { db } from '@/service/firebase'
 import { Field } from '@/components/ui/field'
 import { formSchema } from '@/config/schemas'
-import { Button } from '@/components/ui/button'
 import { toaster } from '@/components/ui/toaster'
 import { Tooltip } from '@/components/ui/tooltip'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -224,25 +223,14 @@ export const FormEdit: FC = (): JSX.Element => {
 								watchQuestions={watchQuestions}
 							/>
 						))}
-
-						<HStack w='full' justify='end'>
-							<Button
-								size='sm'
-								type='submit'
-								w={['full', 'auto']}
-								loading={isSubmitting}
-								loadingText='Atualizando'
-							>
-								Atualizar formulário
-							</Button>
-						</HStack>
 					</VStack>
 
 					<FormActionBar
 						setValue={setValue}
 						getValues={getValues}
+						onSubmitForm={onSubmitForm}
+						handleSubmit={handleSubmit}
 						isSubmitting={isSubmitting}
-						watchQuestions={watchQuestions}
 					/>
 				</VStack>
 			</Flex>

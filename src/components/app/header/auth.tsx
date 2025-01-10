@@ -5,6 +5,7 @@ import { FaMagnifyingGlass } from 'react-icons/fa6'
 import { HStack, Input, Link as ChakraLink, Text } from '@chakra-ui/react'
 
 import { UserMenu } from '../menu/user'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { InputGroup } from '@/components/ui/input-group'
 
 interface HeaderAuthProps {
@@ -14,6 +15,8 @@ interface HeaderAuthProps {
 
 export const HeaderAuth: FC<HeaderAuthProps> = memo(
 	({ title, showSearch = false }: HeaderAuthProps): JSX.Element => {
+		const isMobile = useIsMobile()
+
 		return (
 			<HStack
 				px={8}
@@ -35,12 +38,12 @@ export const HeaderAuth: FC<HeaderAuthProps> = memo(
 								color='fg.muted'
 								fontWeight='bold'
 								transition='colors'
-								display={['none', 'block']}
+								display={showSearch ? ['none', 'block'] : 'block'}
 								_hover={{
 									color: 'fg'
 								}}
 							>
-								{title || 'Forms'}
+								{isMobile ? 'Forms' : title || 'Forms'}
 							</Text>
 						</Link>
 					</ChakraLink>

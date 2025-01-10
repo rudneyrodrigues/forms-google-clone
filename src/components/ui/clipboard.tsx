@@ -14,10 +14,10 @@ interface ClipboardIconProps extends ChakraClipboard.IndicatorProps {
 }
 
 const ClipboardIcon = React.forwardRef<HTMLDivElement, ClipboardIconProps>(
-	function ClipboardIcon(props, ref) {
+	function ClipboardIcon({ icon: Icon, ...props }, ref) {
 		return (
 			<ChakraClipboard.Indicator copied={<LuCheck />} {...props} ref={ref}>
-				{props.icon ? <props.icon /> : <LuClipboard />}
+				{Icon ? <Icon /> : <LuClipboard />}
 			</ChakraClipboard.Indicator>
 		)
 	}
@@ -57,11 +57,11 @@ interface ClipboardButtonProps extends ButtonProps {
 export const ClipboardButton = React.forwardRef<
 	HTMLButtonElement,
 	ClipboardButtonProps
->(function ClipboardButton(props, ref) {
+>(function ClipboardButton({ icon: Icon, ...props }, ref) {
 	return (
 		<ChakraClipboard.Trigger asChild>
 			<Button ref={ref} size='sm' variant='surface' {...props}>
-				<ClipboardIcon icon={props.icon ? props.icon : LuClipboard} />
+				<ClipboardIcon icon={Icon ? Icon : LuClipboard} />
 				<ClipboardCopyText />
 			</Button>
 		</ChakraClipboard.Trigger>
@@ -97,11 +97,11 @@ interface ClipboardIconButtonProps extends ButtonProps {
 export const ClipboardIconButton = React.forwardRef<
 	HTMLButtonElement,
 	ClipboardIconButtonProps
->(function ClipboardIconButton(props, ref) {
+>(function ClipboardIconButton({ icon: Icon, ...props }, ref) {
 	return (
 		<ChakraClipboard.Trigger asChild>
 			<IconButton ref={ref} size='xs' variant='subtle' {...props}>
-				<ClipboardIcon icon={props.icon ? props.icon : LuClipboard} />
+				<ClipboardIcon icon={Icon ? Icon : LuClipboard} />
 				<ClipboardCopyText srOnly />
 			</IconButton>
 		</ChakraClipboard.Trigger>

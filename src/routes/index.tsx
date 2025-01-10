@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router'
 import { App } from '@/app'
 import { Login } from '@/app/login'
 import { Profile } from '@/app/profile'
-import { FormNew } from '@/app/form/new'
+import { ErrorPage } from '@/app/error'
 import { Register } from '@/app/register'
 import { FormEdit } from '@/app/form/edit'
 import { Dashboard } from '@/app/dashboard'
@@ -15,6 +15,7 @@ import { loaderFormEdit } from '@/app/form/edit/loader'
 export const router = createBrowserRouter([
 	{
 		element: <App />,
+		errorElement: <ErrorPage />,
 		children: [
 			{
 				element: <RedirectLogin />,
@@ -40,10 +41,6 @@ export const router = createBrowserRouter([
 						path: '/form',
 						children: [
 							{
-								path: 'new',
-								element: <FormNew />
-							},
-							{
 								path: ':id',
 								element: <FormEdit />,
 								loader: loaderFormEdit,
@@ -53,7 +50,8 @@ export const router = createBrowserRouter([
 					},
 					{
 						path: '/profile',
-						element: <Profile />
+						element: <Profile />,
+						errorElement: <ErrorPage />
 					}
 				]
 			}
