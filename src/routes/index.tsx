@@ -2,15 +2,16 @@ import { createBrowserRouter } from 'react-router'
 
 import { App } from '@/app'
 import { Login } from '@/app/login'
+import { FormEdit } from '@/app/form'
 import { Profile } from '@/app/profile'
 import { ErrorPage } from '@/app/error'
 import { Register } from '@/app/register'
-import { FormEdit } from '@/app/form/edit'
+import { FormView } from '@/app/form/view'
 import { Dashboard } from '@/app/dashboard'
 import { PrivateRoutes } from './private-routes'
 import { RedirectLogin } from './redirect-login'
-import { ErrorFormEdit } from '@/app/form/edit/error'
-import { loaderFormEdit } from '@/app/form/edit/loader'
+import { loaderFormEdit } from '@/app/form/loader'
+import { loaderFormView } from '@/app/form/view/loader'
 
 export const router = createBrowserRouter([
 	{
@@ -41,10 +42,16 @@ export const router = createBrowserRouter([
 						path: '/form',
 						children: [
 							{
-								path: ':id',
+								path: ':id/',
 								element: <FormEdit />,
 								loader: loaderFormEdit,
-								errorElement: <ErrorFormEdit />
+								errorElement: <ErrorPage />
+							},
+							{
+								path: ':id/view',
+								element: <FormView />,
+								loader: loaderFormView,
+								errorElement: <ErrorPage />
 							}
 						]
 					},

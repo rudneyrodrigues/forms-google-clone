@@ -7,7 +7,8 @@ import { router } from './routes'
 import { Toaster } from './components/ui/toaster'
 import { Provider } from '@/components/ui/provider.tsx'
 
-createRoot(document.getElementById('root')!).render(
+const root = createRoot(document.getElementById('root')!)
+root.render(
 	<StrictMode>
 		<Provider>
 			<Toaster />

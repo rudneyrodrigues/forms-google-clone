@@ -40,5 +40,17 @@ export type FormData = {
 }
 
 export type FormDataEdit = {
+	answers: {
+		accepting: boolean
+		loginRequired: boolean
+	}
+	presentations: {
+		confirmationMessage: string
+		showProgressBar: boolean
+		shuffleQuestions: boolean
+	}
+	updatedAt: Date
 	questions: TypeQuestions[]
 } & Omit<FormData, 'questions'>
+
+export type FormDataView = {} & FormDataEdit

@@ -1,12 +1,12 @@
 import { FC } from 'react'
-import { Outlet } from 'react-router'
+import { Outlet, useNavigation } from 'react-router'
 
+import { LoadingPage } from './loading'
 import { AuthProvider } from '@/contexts/auth-context'
 
 export const App: FC = (): JSX.Element => {
-	return (
-		<AuthProvider>
-			<Outlet />
-		</AuthProvider>
-	)
+	const navigation = useNavigation()
+	const isLoading = navigation.state === 'loading'
+
+	return <AuthProvider>{isLoading ? <LoadingPage /> : <Outlet />}</AuthProvider>
 }
