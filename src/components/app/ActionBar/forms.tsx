@@ -3,9 +3,9 @@ import { IconButton } from '@chakra-ui/react'
 import { LuImage, LuPlus } from 'react-icons/lu'
 import {
 	SubmitHandler,
+	UseFormSetValue,
 	UseFormGetValues,
-	UseFormHandleSubmit,
-	UseFormSetValue
+	UseFormHandleSubmit
 } from 'react-hook-form'
 
 import { Form } from '@/config/types'

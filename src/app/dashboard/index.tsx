@@ -22,8 +22,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/empty-state'
 import { HeaderAuth } from '@/components/app/header/auth'
 import { useGetAllForms } from '@/hooks/swr/useGetAllForms'
-import { MoreFormDashboard } from '@/components/app/menu/more-form-dashboard'
 import { NewFormButton } from '@/components/app/new-form-button'
+import { MoreFormDashboard } from '@/components/app/menu/more-form-dashboard'
 
 export const Dashboard: FC = (): JSX.Element => {
 	const { data, error, isLoading } = useGetAllForms()
@@ -42,9 +42,6 @@ export const Dashboard: FC = (): JSX.Element => {
 							// attached
 						>
 							<NewFormButton />
-							{/* <Button size='sm' variant='outline'>
-								<Link to='/form/new'>Criar formulário</Link>
-							</Button> */}
 							{/* <MenuRoot positioning={{ placement: 'bottom-start' }}>
 								<MenuTrigger asChild>
 									<IconButton

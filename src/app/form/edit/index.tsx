@@ -1,5 +1,6 @@
 import { FC } from 'react'
-import { LuEye, LuPlus, LuTrash } from 'react-icons/lu'
+import { MdShare } from 'react-icons/md'
+import { LuEye, LuTrash } from 'react-icons/lu'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useLoaderData, useNavigation } from 'react-router'
@@ -10,28 +11,21 @@ import {
 	HStack,
 	VStack,
 	Separator,
-	ClipboardRoot,
 	IconButton,
-	Tooltip
+	ClipboardRoot
 } from '@chakra-ui/react'
 
 import { Field } from '@/components/ui/field'
 import { formSchema } from '@/config/schemas'
-import { Button } from '@/components/ui/button'
-import { addQuestion } from '@/utils/add-question'
+import { Tooltip } from '@/components/ui/tooltip'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Form, FormDataEdit } from '@/config/types'
 import { InputGroup } from '@/components/ui/input-group'
 import { HeaderAuth } from '@/components/app/header/auth'
 import { Questions } from '@/components/app/forms/questions'
-import {
-	ActionBarRoot,
-	ActionBarContent,
-	ActionBarSeparator
-} from '@/components/ui/action-bar'
-import { DialogDeleteForm } from '@/components/app/dialog/delete-form'
 import { ClipboardIconButton } from '@/components/ui/clipboard'
-import { MdShare } from 'react-icons/md'
+import { FormActionBar } from '@/components/app/ActionBar/forms'
+import { DialogDeleteForm } from '@/components/app/dialog/delete-form'
 
 export const FormEdit: FC = (): JSX.Element => {
 	const navigation = useNavigation()
@@ -175,28 +169,13 @@ export const FormEdit: FC = (): JSX.Element => {
 						))}
 					</VStack>
 
-					<ActionBarRoot open={true}>
-						<ActionBarContent>
-							<Button
-								size='sm'
-								variant='ghost'
-								disabled={isSubmitting}
-								onClick={() =>
-									addQuestion({ setValue, getValues, type: 'short-text' })
-								}
-							>
-								<LuPlus />
-								Adicionar
-							</Button>
-
-							<ActionBarSeparator />
-
-							<Text color='fg.muted' fontSize='xs'>
-								{watchQuestions.length}{' '}
-								{watchQuestions.length === 1 ? 'pergunta' : 'perguntas'}
-							</Text>
-						</ActionBarContent>
-					</ActionBarRoot>
+					<FormActionBar
+						setValue={setValue}
+						getValues={getValues}
+						onSubmitForm={onSubmitForm}
+						handleSubmit={handleSubmit}
+						isSubmitting={isSubmitting}
+					/>
 				</VStack>
 			</Flex>
 		</VStack>
