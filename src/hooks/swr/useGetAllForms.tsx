@@ -23,9 +23,13 @@ export const useGetAllForms = () => {
 		return data as FormData[]
 	}
 
-	const { data, error, mutate, isLoading } = useSWR('forms', fetch, {
-		shouldRetryOnError: false
-	})
+	const { data, error, mutate, isLoading } = useSWR(
+		`forms/${user.uid}`,
+		fetch,
+		{
+			shouldRetryOnError: false
+		}
+	)
 
 	return {
 		data,
