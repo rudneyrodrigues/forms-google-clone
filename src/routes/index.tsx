@@ -10,8 +10,6 @@ import { FormView } from '@/app/form/view'
 import { Dashboard } from '@/app/dashboard'
 import { PrivateRoutes } from './private-routes'
 import { RedirectLogin } from './redirect-login'
-import { loaderFormEdit } from '@/app/form/loader'
-import { loaderFormView } from '@/app/form/view/loader'
 
 export const router = createBrowserRouter([
 	{
@@ -44,13 +42,11 @@ export const router = createBrowserRouter([
 							{
 								path: ':id/',
 								element: <FormEdit />,
-								loader: loaderFormEdit,
 								errorElement: <ErrorPage />
 							},
 							{
 								path: ':id/view',
 								element: <FormView />,
-								loader: loaderFormView,
 								errorElement: <ErrorPage />
 							}
 						]

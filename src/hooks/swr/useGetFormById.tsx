@@ -2,16 +2,19 @@ import useSWR from 'swr'
 import { doc, getDoc } from 'firebase/firestore'
 
 import { db } from '@/service/firebase'
-import { FormData } from '@/config/types'
+import { FormData, FormDataEdit } from '@/config/types'
 
 interface UseGetFormById {
-	id: string
+	id: string | undefined
 }
 
 export const useGetFormById = ({ id }: UseGetFormById) => {
 	const fetch = async () => {
-		const formRef = doc(db, 'forms', id)
+		if (!id) {
+			throw new Error('ID não fornecido')
+		}
 
+		const formRef = doc(db, 'forms', id)
 		const docSnap = await getDoc(formRef)
 
 		if (!docSnap.exists()) {
@@ -24,18 +27,25 @@ export const useGetFormById = ({ id }: UseGetFormById) => {
 		} as FormData
 
 		// Transforme o objeto de questions em um array
-		const newData = {
+		const formattedData = {
 			...data,
 			questions: Object.values(data.questions)
-		}
+		} as FormDataEdit
 
-		return newData
+		// Ordene as perguntas pelo campo order
+		formattedData.questions.sort((a, b) => a.order - b.order)
+
+		return formattedData
 	}
 
-	const { data, error, mutate, isLoading } = useSWR('forms', fetch, {
-		revalidateOnFocus: false,
-		shouldRetryOnError: false
-	})
+	const { data, error, mutate, isLoading } = useSWR(
+		id ? `forms/${id}` : null,
+		fetch,
+		{
+			revalidateOnFocus: false,
+			shouldRetryOnError: false
+		}
+	)
 
 	return {
 		data,
