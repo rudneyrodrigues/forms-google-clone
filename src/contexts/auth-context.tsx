@@ -8,9 +8,9 @@ import {
 	signInWithPopup,
 	onAuthStateChanged,
 	GoogleAuthProvider,
+	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
-	createUserWithEmailAndPassword,
-	sendPasswordResetEmail
+	createUserWithEmailAndPassword
 } from 'firebase/auth'
 
 import { auth } from '@/service/firebase'
@@ -46,7 +46,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 					const user = credentials.user
 
 					if (!user) {
-						window.alert('Usuário não encontrado')
+						toaster.error({
+							title: 'Erro ao fazer login',
+							description: 'Usuário não encontrado',
+							action: {
+								label: 'Ok',
+								onClick: () => {}
+							}
+						})
 						return
 					}
 
@@ -64,7 +71,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		} catch (error) {
 			console.log(error)
 
-			window.alert('Erro ao fazer login')
+			toaster.error({
+				title: 'Erro ao fazer login',
+				description: 'Usuário não encontrado! Verifique suas credenciais',
+				action: {
+					label: 'Ok',
+					onClick: () => {}
+				}
+			})
 		} finally {
 			setLoading(false)
 		}
@@ -79,7 +93,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 					const user = credentials.user
 
 					if (!user) {
-						window.alert('Usuário não encontrado')
+						toaster.error({
+							title: 'Erro ao fazer login',
+							description: 'Usuário não encontrado',
+							action: {
+								label: 'Ok',
+								onClick: () => {}
+							}
+						})
 						return
 					}
 
@@ -99,7 +120,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		} catch (error) {
 			console.log(error)
 
-			window.alert('Erro ao se registrar na aplicação')
+			toaster.error({
+				title: 'Erro ao registrar',
+				description: 'Tente novamente mais tarde',
+				action: {
+					label: 'Ok',
+					onClick: () => {}
+				}
+			})
 		} finally {
 			setLoading(false)
 		}
@@ -115,7 +143,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 				const user = credentials.user
 
 				if (!user) {
-					window.alert('Usuário não encontrado')
+					toaster.error({
+						title: 'Erro ao fazer login',
+						description: 'Usuário não encontrado',
+						action: {
+							label: 'Ok',
+							onClick: () => {}
+						}
+					})
 					return
 				}
 
@@ -132,7 +167,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		} catch (error) {
 			console.log(error)
 
-			window.alert('Erro ao fazer login com Google')
+			toaster.error({
+				title: 'Erro ao fazer login com Google',
+				description: 'Tente novamente mais tarde',
+				action: {
+					label: 'Ok',
+					onClick: () => {}
+				}
+			})
 		} finally {
 			setLoading(false)
 		}
@@ -181,7 +223,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		} catch (error) {
 			console.log(error)
 
-			window.alert('Erro ao fazer logout')
+			toaster.error({
+				title: 'Erro ao fazer logout',
+				description: 'Tente novamente mais tarde',
+				action: {
+					label: 'Ok',
+					onClick: () => {}
+				}
+			})
 		} finally {
 			setLoading(false)
 		}
@@ -215,12 +264,12 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		<AuthContext.Provider
 			value={{
 				user,
-				loading,
 				login,
+				logout,
+				loading,
 				register,
 				forgotPassword,
-				loginWithGoogle,
-				logout
+				loginWithGoogle
 			}}
 		>
 			{children}
