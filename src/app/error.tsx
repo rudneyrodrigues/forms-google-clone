@@ -16,8 +16,8 @@ export const ErrorPage: FC = (): JSX.Element => {
 					</Heading>
 				</HStack>
 
-				<VStack gap={0}>
-					<Text>
+				<VStack gap={4}>
+					<Text textAlign='center'>
 						Pedimos desculpas, mas ocorreu um{' '}
 						<Mark variant='subtle' colorPalette='red'>
 							erro ao carregar a página
@@ -25,7 +25,9 @@ export const ErrorPage: FC = (): JSX.Element => {
 						.
 					</Text>
 
-					<Text color='fg.muted'>Por favor, tente novamente mais tarde.</Text>
+					<Text fontSize='sm' textAlign='center' color='fg.muted'>
+						Por favor, tente novamente mais tarde.
+					</Text>
 				</VStack>
 
 				<Button asChild>
