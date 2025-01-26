@@ -1,6 +1,9 @@
 import { FC, memo } from 'react'
 import { IconButton } from '@chakra-ui/react'
-import { LuImage, LuPlus } from 'react-icons/lu'
+import {
+	LuPlus
+	// LuImage,
+} from 'react-icons/lu'
 import {
 	SubmitHandler,
 	UseFormSetValue,
@@ -47,11 +50,11 @@ const FormActionBarComponent: FC<FormActionBarProps> = ({
 						<LuPlus />
 					</IconButton>
 				</Tooltip>
-				<Tooltip content='Adicionar banner'>
+				{/* <Tooltip content='Adicionar banner'>
 					<IconButton variant='ghost' disabled={isSubmitting}>
 						<LuImage />
 					</IconButton>
-				</Tooltip>
+				</Tooltip> */}
 
 				<ActionBarSeparator />
 

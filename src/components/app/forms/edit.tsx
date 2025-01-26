@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Link } from 'react-router'
-import { MdShare } from 'react-icons/md'
+// import { MdShare } from 'react-icons/md'
 import { LuEye, LuTrash } from 'react-icons/lu'
 import { doc, updateDoc } from 'firebase/firestore'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,8 +11,8 @@ import {
 	HStack,
 	VStack,
 	Separator,
-	IconButton,
-	ClipboardRoot
+	IconButton
+	// ClipboardRoot
 } from '@chakra-ui/react'
 
 import { db } from '@/service/firebase'
@@ -22,7 +22,7 @@ import { Tooltip } from '@/components/ui/tooltip'
 import { toaster } from '@/components/ui/toaster'
 import { InputGroup } from '@/components/ui/input-group'
 import { Questions } from '@/components/app/forms/questions'
-import { ClipboardIconButton } from '@/components/ui/clipboard'
+// import { ClipboardIconButton } from '@/components/ui/clipboard'
 import { FormActionBar } from '@/components/app/action-bar/forms'
 import { Form, FormDataEdit, TypeQuestions } from '@/config/types'
 import { DialogDeleteForm } from '@/components/app/dialog/delete-form'
@@ -118,17 +118,17 @@ export const EditingForm: FC<EditingFormProps> = ({
 			<HStack mb={8} w='full' justify='end'>
 				<Tooltip content='Visualizar formulário'>
 					<IconButton variant='ghost' asChild>
-						<Link to={`/form/${data.id}/preview`} target='_blank'>
+						<Link to={`/form/${data.id}/view`} target='_blank'>
 							<LuEye />
 						</Link>
 					</IconButton>
 				</Tooltip>
 
-				<ClipboardRoot value={`${window.location.origin}/form/${data.id}/view`}>
+				{/* <ClipboardRoot value={`${window.location.origin}/form/${data.id}/view`}>
 					<Tooltip content='Link de compartilhamento'>
 						<ClipboardIconButton size='md' variant='ghost' icon={MdShare} />
 					</Tooltip>
-				</ClipboardRoot>
+				</ClipboardRoot> */}
 
 				<DialogDeleteForm formId={data.id} title={watchTitle}>
 					<IconButton variant='ghost'>
